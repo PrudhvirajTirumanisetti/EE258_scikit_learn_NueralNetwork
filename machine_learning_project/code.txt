@@ -1,0 +1,48 @@
+# Radom Forest Train
+model = RandomForestClassifier(n_estimators=10, max_depth=5, min_samples_split=1, random_state=20160121)
+model.fit(tr_df[['Pclass','Sex','Age', 'SibSp', 'Embarked']], lb[0])
+output = model.predict(all_test_df[['Pclass','Sex','Age', 'SibSp', 'Embarked']].values)
+
+# Random Forest Graph Forest
+from IPython.display import Image, display
+from sklearn.externals.six import StringIO
+import pydot 
+
+for dtree in model.estimators_:
+
+    dot_data = StringIO() 
+    tree.export_graphviz(dtree, out_file=dot_data,  
+                     filled=True, rounded=True,  
+                     special_characters=True)  
+    graph = pydot.graph_from_dot_data(dot_data.getvalue())  
+    display(Image(graph.create_png()))
+
+# Random Forest Prediction File
+predictions_file = open("rf.csv", "w")
+open_file_object = csv.writer(predictions_file)
+open_file_object.writerow(["PassengerId","Survived"])
+open_file_object.writerows(zip(ids, output))
+predictions_file.close()
+print ('Done.')
+
+
+# Decision Tree train
+model = DecisionTreeClassifier(random_state=20160121, max_depth = 5, max_leaf_nodes = 9, min_samples_leaf = 2)
+model.fit(tr_df[['Sex','Age', 'SibSp', 'Parch']], lb[0])
+output = model.predict(all_test_df[['Sex','Age', 'SibSp', 'Parch']].values)
+
+# Decision Tree graph
+dot_data = StringIO() 
+tree.export_graphviz(model, out_file=dot_data,  
+                     filled=True, rounded=True,  
+                     special_characters=True)  
+graph = pydot.graph_from_dot_data(dot_data.getvalue())  
+display(Image(graph.create_png()))
+
+# Decision tree Prediction File
+predictions_file = open("dt.csv", "w")
+open_file_object = csv.writer(predictions_file)
+open_file_object.writerow(["PassengerId","Survived"])
+open_file_object.writerows(zip(ids, output))
+predictions_file.close()
+print ('Done.')
